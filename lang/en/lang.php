@@ -120,6 +120,9 @@ return [
             'sha_out' => 'SHA-OUT Signature',
             'sha_out_comment' => 'Configuration -> Technical information -> Transaction feedback',
         ],
+        'mollie' => [
+            'api_key' => 'Mollie API key',
+        ],
     ],
     'notification_settings' => [
         'label' => 'Notifications',

@@ -18,6 +18,7 @@ use OFFLINE\Mall\Classes\Index\Index;
 use OFFLINE\Mall\Classes\Index\IndexNotSupportedException;
 use OFFLINE\Mall\Classes\Index\MySQL\MySQL;
 use OFFLINE\Mall\Classes\Payments\DefaultPaymentGateway;
+use OFFLINE\Mall\Classes\Payments\Mollie;
 use OFFLINE\Mall\Classes\Payments\Offline;
 use OFFLINE\Mall\Classes\Payments\PaymentGateway;
 use OFFLINE\Mall\Classes\Payments\PayPalRest;
@@ -46,6 +47,7 @@ trait BootServiceContainer
             $gateway->registerProvider(new PayPalRest());
             $gateway->registerProvider(new Stripe());
             $gateway->registerProvider(new PostFinance());
+            $gateway->registerProvider(new Mollie());
 
             return $gateway;
         });

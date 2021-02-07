@@ -28,7 +28,8 @@
     "omnipay/stripe": "^3.0",
     "vitalybaev/google-merchant-feed": "^1.1",
     "barryvdh/laravel-dompdf": "^0.8.5",
-    "bummzack/omnipay-postfinance": "dev-master"
+    "bummzack/omnipay-postfinance": "dev-master",
+    "omnipay/mollie": "^5.2.1"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",

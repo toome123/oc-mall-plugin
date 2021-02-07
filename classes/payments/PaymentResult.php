@@ -59,12 +59,12 @@ class PaymentResult
      * PaymentResult constructor.
      *
      * @param PaymentProvider $provider
-     * @param Order           $order
+     * @param Order $order
      */
     public function __construct(PaymentProvider $provider, Order $order)
     {
-        $this->provider   = $provider;
-        $this->order      = $order;
+        $this->provider = $provider;
+        $this->order = $order;
         $this->successful = false;
     }
 
@@ -94,7 +94,7 @@ class PaymentResult
         }
 
         try {
-            $this->order->payment_id    = $payment->id;
+            $this->order->payment_id = $payment->id;
             $this->order->payment_state = PaidState::class;
             $this->order->save();
         } catch (\Throwable $e) {
@@ -116,9 +116,22 @@ class PaymentResult
      *
      * @return PaymentResult
      */
-    public function pending(): self
+    public function pending(array $data = [], $response = null): self
     {
         $this->successful = true;
+
+        if ($data || $response) {
+            try {
+                $payment = $this->logSuccessfulPayment($data, $response);
+                $this->order->payment_id = $payment->id;
+            } catch (\Throwable $e) {
+                // Even if the log failed we *have* to mark this order as paid since the payment went already through.
+                logger()->error(
+                    'OFFLINE.Mall: Could not log pending payment.',
+                    ['data' => $data, 'response' => $response, 'order' => $this->order, 'exception' => $e]
+                );
+            }
+        }
 
         try {
             $this->order->payment_state = PendingState::class;
@@ -186,7 +199,7 @@ class PaymentResult
      */
     public function redirect($url): self
     {
-        $this->redirect    = true;
+        $this->redirect = true;
         $this->redirectUrl = $url;
 
         return $this;
@@ -201,7 +214,7 @@ class PaymentResult
      */
     public function redirectResponse(Response $response): self
     {
-        $this->redirect         = true;
+        $this->redirect = true;
         $this->redirectResponse = $response;
 
         return $this;
@@ -236,7 +249,7 @@ class PaymentResult
     /**
      * Create a PaymentLog entry.
      *
-     * @param bool  $failed
+     * @param bool $failed
      * @param array $data
      * @param       $response
      *
@@ -244,15 +257,15 @@ class PaymentResult
      */
     protected function logPayment(bool $failed, array $data, $response): PaymentLog
     {
-        $log                   = new PaymentLog();
-        $log->failed           = $failed;
-        $log->data             = $data;
-        $log->ip               = request()->ip();
-        $log->session_id       = session()->get('cart_session_id');
+        $log = new PaymentLog();
+        $log->failed = $failed;
+        $log->data = $data;
+        $log->ip = request()->ip();
+        $log->session_id = session()->get('cart_session_id');
         $log->payment_provider = $this->provider->identifier();
-        $log->payment_method   = $this->order->payment_method;
-        $log->order_data       = $this->order;
-        $log->order_id         = $this->order->id;
+        $log->payment_method = $this->order->payment_method;
+        $log->order_data = $this->order;
+        $log->order_id = $this->order->id;
 
         if ($response) {
             $log->message = method_exists($response, 'getMessage')

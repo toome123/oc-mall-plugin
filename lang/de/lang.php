@@ -119,6 +119,9 @@
             'sha_out' => 'SHA-OUT Signatur',
             'sha_out_comment' => 'Konfiguration -> Technische Informationen -> Transaktions-Feedback',
         ],
+        'mollie' => [
+            'api_key' => 'Mollie API Key',
+        ],
     ],
     'notification_settings' => [
         'label' => 'Benachrichtigungen',

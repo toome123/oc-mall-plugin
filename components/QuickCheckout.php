@@ -200,6 +200,9 @@ class QuickCheckout extends MallComponent
         // from the order's payment logs.
         if ($this->step === 'failed' && $this->order) {
             $this->paymentError = optional($this->order->payment_logs->first())->message ?? 'Unknown error';
+            if (is_object($this->paymentError)) {
+                $this->paymentError = 'Cannot display error details';
+            }
         }
     }
 
