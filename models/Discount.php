@@ -30,7 +30,7 @@ class Discount extends Model
         'shipping_description'                 => 'required_if:type,shipping',
         'shipping_guaranteed_days_to_delivery' => 'nullable|numeric',
     ];
-    public $with = ['shipping_prices', 'amounts', 'totals_to_reach','shipping_methods'];
+    public $with = ['shipping_prices', 'amounts', 'totals_to_reach'];
     public $table = 'offline_mall_discounts';
     public $dates = ['valid_from', 'expires'];
     public $nullable = ['max_number_of_usages'];
@@ -64,11 +64,7 @@ class Discount extends Model
     ];
     public $belongsToMany = [
         'carts' => [Cart::class, 'table' => 'offline_mall_cart_discount'],
-        'shipping_methods' => [
-            ShippingMethod::class,'table' => 'offline_mall_shipping_method_discounts',
-            'key'      => 'discount_id',
-            'otherKey' => 'shipping_method_id'
-        ]
+        'shipping_methods' => [ShippingMethod::class, 'table' => 'offline_mall_shipping_method_discounts']
     ];
 
     public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];

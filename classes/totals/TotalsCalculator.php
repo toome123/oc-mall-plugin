@@ -284,6 +284,7 @@ class TotalsCalculator
     {
         $nonCodeTriggers = Discount
             ::whereIn('trigger', ['total', 'product', 'customer_group', 'shipping_method'])
+            ->with('shipping_methods')
             ->where(function ($q) {
                 $q->whereNull('valid_from')
                     ->orWhere('valid_from', '<=', Carbon::now());
