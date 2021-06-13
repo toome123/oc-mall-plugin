@@ -75,7 +75,7 @@ class ShippingMethod extends Model
         ],
         'discounts'     => [
             Discount::class,
-            'table'    => 'offline_mall_shipping_method_discounts',
+            'table'    => 'offline_mall_shipping_method_discount',
             'key'      => 'shipping_method_id',
             'otherKey' => 'discount_id',
         ],
