@@ -53,8 +53,7 @@ fields:
         type: mall.price
     shipping_methods:
         span: right
-        path: $/offline/mall/controllers/discounts/_shipping_methods.htm
-        type: partial
+        type: relation
         trigger:
             action: show
             field: trigger

@@ -142,15 +142,9 @@ class DiscountApplier
 
     private function currentDiscountHasShippingMethod(): bool
     {
-        $discounts=Discount::where('trigger','shipping_method')->get();
-
-        foreach ($discounts as $discount ){
-            foreach( $discount->shipping_methods as $shipping_method) {
-            if ($this->input->shipping_method->id === $shipping_method->id) {return true;}
-            }
-        }
-
-        return false;
+        return Discount::where('trigger', 'shipping_method')->whereHas('shipping_methods', function($q) {
+            $q->where('offline_mall_shipping_methods.id', $this->input->shipping_method->id);
+        })->exists();
     }
 
 }
